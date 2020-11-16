@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="91b932ba8d514fe187fc93b23d0471f5" Name="Diagram1">
+        <EntityTypeShape EntityType="adisyondbModel.Hesap" Width="1.5" PointX="7.5" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.Kafeler" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.Kullanici" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.Masalar" Width="1.5" PointX="3" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.Siparis" Width="1.5" PointX="5.25" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.SiparisDetay" Width="1.5" PointX="7.5" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.Urun" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="adisyondbModel.UrunGruplari" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <AssociationConnector Association="adisyondbModel.FK_Hesap_Siparis" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_Kullanici_Kafeler" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_Masalar_Kafeler" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_Urun_Kafeler" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_Siparis_Masalar" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_SiparisDetay_Siparis" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_SiparisDetay_Urun" ManuallyRouted="false" />
+        <AssociationConnector Association="adisyondbModel.FK_Urun_UrunGruplari" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

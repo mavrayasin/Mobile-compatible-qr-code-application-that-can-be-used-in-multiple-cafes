@@ -1,0 +1,57 @@
+﻿@model  CokluAdisyon.Models.masalarcls
+@{
+    ViewBag.Title = "Anasayfa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var dolu_masa_ids = Model.siparislers.Select(a => a.Masa_ID).ToList();
+
+}
+<div class="page-header">
+    <h1>
+        Masalar
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Sipariş İşlemleri
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel">
+            <div class="panel-heading">
+               
+            </div>
+            <div class="panel-body">
+                <div class="row" id="fontawesome-list">
+                    
+                  <div class="col-md-12">
+                      <div class="fa-item col-md-3 col-sm-4">
+                          @foreach (var item in Model.masalars)
+                          {
+                              string doluBosRenk = "infobox-green";
+                              if (dolu_masa_ids.Contains(item.MasaNo))
+                              {
+                                  doluBosRenk = "infobox-red";
+                              }
+
+                              <a href="/Adisyon/MasaDetay?masa_id=@item.MasaID">
+                                  <div class="infobox @doluBosRenk">
+                                      <div class="infobox-icon">
+                                          <i class="fa fa-coffee"></i>
+                                      </div>
+
+                                      <div class="infobox-data">
+                                          <span class="infobox-data-number">Masa-@item.MasaNo</span>
+                                      </div>
+
+                                  </div>
+                              </a>
+                          }
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

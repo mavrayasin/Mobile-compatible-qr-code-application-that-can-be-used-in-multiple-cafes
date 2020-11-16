@@ -1,0 +1,185 @@
+﻿@model CokluAdisyon.Models.hesapdetay
+@{
+    ViewBag.Title = "HesapDefteri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string[] odemeTur = { "Kredi Kartı", "Nakit" };
+}
+
+<div class="page-header">
+    <h1>
+        Hesap Defteri
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Muhasebe Kayıtları
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+
+<div class="row">
+    <div class="container">
+        <!-- PAGE CONTENT BEGINS -->
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs padding-18">
+                <li class="active">
+                    <a data-toggle="tab" href="#home">
+                        <i class="green ace-icon fa fa-tachometer bigger-120"></i>
+                        Günlük
+                    </a>
+                </li>
+
+                <li>
+                    <a data-toggle="tab" href="#feed">
+                        <i class="orange ace-icon fa fa-bar-chart-o bigger-120"></i>
+                        Haftalık
+                    </a>
+                </li>
+
+                <li>
+                    <a data-toggle="tab" href="#friends">
+                        <i class="blue ace-icon fa fa-calendar bigger-120"></i>
+                        Aylık
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content no-border padding-24">
+                <div id="home" class="tab-pane in active">
+                    <div class="row">
+
+                        <table class="table table-striped">
+                            <thead class="thin-border-bottom">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Masa No
+                                    </th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Ödeme Türü
+                                    </th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Tarih
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Tutar
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{ int syc = 1;}
+                                @foreach (var item_hesaplar in Model.hesaplar.Where(a => a.Tarih.Date == DateTime.Now.Date))
+                                {
+                                    <tr>
+                                        <td class="text-center">@syc</td>
+                                        <td class="text-center">Masa-@item_hesaplar.Siparis.Masa_ID</td>
+                                        <td class="text-center">@odemeTur[item_hesaplar.OdemeTuru - 1]</td>
+                                        <td class="text-center">@item_hesaplar.Tarih</td>
+                                        <td class="text-center">@item_hesaplar.Tutar<img src="~/Content/tl.png" width="7" /></td>
+                                    </tr>
+                                    syc++;
+                                }
+                            </tbody>
+                        </table>
+
+                    </div><!-- /.row -->
+
+                </div><!-- /#home -->
+
+                <div id="feed" class="tab-pane">
+                    <div class="row">
+
+                        <table class="table table-striped">
+                            <thead class="thin-border-bottom">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Masa No
+                                    </th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Ödeme Türü
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Tarih
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Tutar
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{ syc = 1;}
+                                @foreach (var item_hesaplar in Model.hesaplar.Where(a => a.Tarih.Date <= DateTime.Now.Date && a.Tarih.Date >= DateTime.Now.AddDays(-7)))
+                                {
+                                    <tr>
+                                        <td class="text-center">@syc</td>
+                                        <td class="text-center">Masa-@item_hesaplar.Siparis.Masa_ID</td>
+                                        <td class="text-center">@odemeTur[item_hesaplar.OdemeTuru - 1]</td>
+                                        <td class="text-center">@item_hesaplar.Tarih</td>
+                                        <td class="text-center">@item_hesaplar.Tutar<img src="~/Content/tl.png" width="7" /></td>
+                                    </tr>
+                                    syc++;
+                                }
+                            </tbody>
+                        </table>
+
+
+
+                    </div><!-- /.row -->
+                </div><!-- /#feed -->
+
+                <div id="friends" class="tab-pane">
+                    <div class="row">
+
+                        <table class="table table-striped">
+                            <thead class="thin-border-bottom">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Masa No
+                                    </th>
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Ödeme Türü
+                                    </th>
+                                    <
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Tarih
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Tutar
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{ syc = 1;}
+                                @foreach (var item_hesaplar in Model.hesaplar.Where(a => a.Tarih.Date <= DateTime.Now.Date && a.Tarih.Date >= DateTime.Now.AddDays(-30)))
+                                {
+                                    <tr>
+                                        <td class="text-center">@syc</td>
+                                        <td class="text-center">Masa-@item_hesaplar.Siparis.Masa_ID</td>
+                                        <td class="text-center">@odemeTur[item_hesaplar.OdemeTuru - 1]</td>
+                                        <td class="text-center">@item_hesaplar.Tarih</td>
+                                        <td class="text-center">@item_hesaplar.Tutar<img src="~/Content/tl.png" width="7" /></td>
+                                    </tr>
+                                    syc++;
+                                }
+                            </tbody>
+                        </table>
+
+
+
+                    </div><!-- /.row -->
+                </div><!-- /#friends -->
+
+            </div>
+        </div>
+
+    </div>
+</div>

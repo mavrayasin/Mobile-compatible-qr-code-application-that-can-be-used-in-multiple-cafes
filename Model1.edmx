@@ -1,0 +1,575 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="adisyondbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Hesap">
+          <Key>
+            <PropertyRef Name="HesapID" />
+          </Key>
+          <Property Name="HesapID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Siparis_ID" Type="int" Nullable="false" />
+          <Property Name="OdemeTuru" Type="int" Nullable="false" />
+          <Property Name="Tarih" Type="datetime" Nullable="false" />
+          <Property Name="Tutar" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kafeler">
+          <Key>
+            <PropertyRef Name="KafeID" />
+          </Key>
+          <Property Name="KafeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KafeAdi" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Kullanici">
+          <Key>
+            <PropertyRef Name="KullaniciID" />
+          </Key>
+          <Property Name="KullaniciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Kafe_ID" Type="int" Nullable="false" />
+          <Property Name="KullaniciAdi" Type="varchar" MaxLength="100" />
+          <Property Name="Sifre" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Masalar">
+          <Key>
+            <PropertyRef Name="MasaID" />
+          </Key>
+          <Property Name="MasaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Kafe_ID" Type="int" Nullable="false" />
+          <Property Name="MasaNo" Type="int" Nullable="false" />
+          <Property Name="Aciklama" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Siparis">
+          <Key>
+            <PropertyRef Name="SiparisID" />
+          </Key>
+          <Property Name="SiparisID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Masa_ID" Type="int" Nullable="false" />
+          <Property Name="HesapOdendi" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SiparisDetay">
+          <Key>
+            <PropertyRef Name="SiparisDetayID" />
+          </Key>
+          <Property Name="SiparisDetayID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Siparis_ID" Type="int" Nullable="false" />
+          <Property Name="Urun_ID" Type="int" Nullable="false" />
+          <Property Name="Adet" Type="int" />
+        </EntityType>
+        <EntityType Name="Urun">
+          <Key>
+            <PropertyRef Name="UrunID" />
+          </Key>
+          <Property Name="UrunID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UrunGrup_ID" Type="int" Nullable="false" />
+          <Property Name="Kafe_ID" Type="int" Nullable="false" />
+          <Property Name="UrunAdi" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="UrunFiyati" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UrunGruplari">
+          <Key>
+            <PropertyRef Name="UrunGrupID" />
+          </Key>
+          <Property Name="UrunGrupID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Adi" Type="varchar" MaxLength="50" />
+          <Property Name="Resim" Type="image" />
+        </EntityType>
+        <Association Name="FK_Hesap_Siparis">
+          <End Role="Siparis" Type="Self.Siparis" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hesap" Type="Self.Hesap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Siparis">
+              <PropertyRef Name="SiparisID" />
+            </Principal>
+            <Dependent Role="Hesap">
+              <PropertyRef Name="Siparis_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kullanici_Kafeler">
+          <End Role="Kafeler" Type="Self.Kafeler" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kafeler">
+              <PropertyRef Name="KafeID" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="Kafe_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Masalar_Kafeler">
+          <End Role="Kafeler" Type="Self.Kafeler" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Masalar" Type="Self.Masalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kafeler">
+              <PropertyRef Name="KafeID" />
+            </Principal>
+            <Dependent Role="Masalar">
+              <PropertyRef Name="Kafe_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparis_Masalar">
+          <End Role="Masalar" Type="Self.Masalar" Multiplicity="1" />
+          <End Role="Siparis" Type="Self.Siparis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Masalar">
+              <PropertyRef Name="MasaID" />
+            </Principal>
+            <Dependent Role="Siparis">
+              <PropertyRef Name="Masa_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SiparisDetay_Siparis">
+          <End Role="Siparis" Type="Self.Siparis" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SiparisDetay" Type="Self.SiparisDetay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Siparis">
+              <PropertyRef Name="SiparisID" />
+            </Principal>
+            <Dependent Role="SiparisDetay">
+              <PropertyRef Name="Siparis_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SiparisDetay_Urun">
+          <End Role="Urun" Type="Self.Urun" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SiparisDetay" Type="Self.SiparisDetay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Urun">
+              <PropertyRef Name="UrunID" />
+            </Principal>
+            <Dependent Role="SiparisDetay">
+              <PropertyRef Name="Urun_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Urun_Kafeler">
+          <End Role="Kafeler" Type="Self.Kafeler" Multiplicity="1" />
+          <End Role="Urun" Type="Self.Urun" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kafeler">
+              <PropertyRef Name="KafeID" />
+            </Principal>
+            <Dependent Role="Urun">
+              <PropertyRef Name="Kafe_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Urun_UrunGruplari">
+          <End Role="UrunGruplari" Type="Self.UrunGruplari" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Urun" Type="Self.Urun" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UrunGruplari">
+              <PropertyRef Name="UrunGrupID" />
+            </Principal>
+            <Dependent Role="Urun">
+              <PropertyRef Name="UrunGrup_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="adisyondbModelStoreContainer">
+          <EntitySet Name="Hesap" EntityType="Self.Hesap" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kafeler" EntityType="Self.Kafeler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kullanici" EntityType="Self.Kullanici" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Masalar" EntityType="Self.Masalar" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Siparis" EntityType="Self.Siparis" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SiparisDetay" EntityType="Self.SiparisDetay" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Urun" EntityType="Self.Urun" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UrunGruplari" EntityType="Self.UrunGruplari" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Hesap_Siparis" Association="Self.FK_Hesap_Siparis">
+            <End Role="Siparis" EntitySet="Siparis" />
+            <End Role="Hesap" EntitySet="Hesap" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kullanici_Kafeler" Association="Self.FK_Kullanici_Kafeler">
+            <End Role="Kafeler" EntitySet="Kafeler" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Masalar_Kafeler" Association="Self.FK_Masalar_Kafeler">
+            <End Role="Kafeler" EntitySet="Kafeler" />
+            <End Role="Masalar" EntitySet="Masalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparis_Masalar" Association="Self.FK_Siparis_Masalar">
+            <End Role="Masalar" EntitySet="Masalar" />
+            <End Role="Siparis" EntitySet="Siparis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SiparisDetay_Siparis" Association="Self.FK_SiparisDetay_Siparis">
+            <End Role="Siparis" EntitySet="Siparis" />
+            <End Role="SiparisDetay" EntitySet="SiparisDetay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SiparisDetay_Urun" Association="Self.FK_SiparisDetay_Urun">
+            <End Role="Urun" EntitySet="Urun" />
+            <End Role="SiparisDetay" EntitySet="SiparisDetay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Urun_Kafeler" Association="Self.FK_Urun_Kafeler">
+            <End Role="Kafeler" EntitySet="Kafeler" />
+            <End Role="Urun" EntitySet="Urun" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Urun_UrunGruplari" Association="Self.FK_Urun_UrunGruplari">
+            <End Role="UrunGruplari" EntitySet="UrunGruplari" />
+            <End Role="Urun" EntitySet="Urun" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="adisyondbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Hesap">
+          <Key>
+            <PropertyRef Name="HesapID" />
+          </Key>
+          <Property Name="HesapID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Siparis_ID" Type="Int32" Nullable="false" />
+          <Property Name="OdemeTuru" Type="Int32" Nullable="false" />
+          <Property Name="Tarih" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Tutar" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Siparis" Relationship="Self.FK_Hesap_Siparis" FromRole="Hesap" ToRole="Siparis" />
+        </EntityType>
+        <EntityType Name="Kafeler">
+          <Key>
+            <PropertyRef Name="KafeID" />
+          </Key>
+          <Property Name="KafeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KafeAdi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Kullanici" Relationship="Self.FK_Kullanici_Kafeler" FromRole="Kafeler" ToRole="Kullanici" />
+          <NavigationProperty Name="Masalar" Relationship="Self.FK_Masalar_Kafeler" FromRole="Kafeler" ToRole="Masalar" />
+          <NavigationProperty Name="Urun" Relationship="Self.FK_Urun_Kafeler" FromRole="Kafeler" ToRole="Urun" />
+        </EntityType>
+        <EntityType Name="Kullanici">
+          <Key>
+            <PropertyRef Name="KullaniciID" />
+          </Key>
+          <Property Name="KullaniciID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Kafe_ID" Type="Int32" Nullable="false" />
+          <Property Name="KullaniciAdi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Sifre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Kafeler" Relationship="Self.FK_Kullanici_Kafeler" FromRole="Kullanici" ToRole="Kafeler" />
+        </EntityType>
+        <EntityType Name="Masalar">
+          <Key>
+            <PropertyRef Name="MasaID" />
+          </Key>
+          <Property Name="MasaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Kafe_ID" Type="Int32" Nullable="false" />
+          <Property Name="MasaNo" Type="Int32" Nullable="false" />
+          <Property Name="Aciklama" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Kafeler" Relationship="Self.FK_Masalar_Kafeler" FromRole="Masalar" ToRole="Kafeler" />
+          <NavigationProperty Name="Siparis" Relationship="Self.FK_Siparis_Masalar" FromRole="Masalar" ToRole="Siparis" />
+        </EntityType>
+        <EntityType Name="Siparis">
+          <Key>
+            <PropertyRef Name="SiparisID" />
+          </Key>
+          <Property Name="SiparisID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Masa_ID" Type="Int32" Nullable="false" />
+          <Property Name="HesapOdendi" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Hesap" Relationship="Self.FK_Hesap_Siparis" FromRole="Siparis" ToRole="Hesap" />
+          <NavigationProperty Name="Masalar" Relationship="Self.FK_Siparis_Masalar" FromRole="Siparis" ToRole="Masalar" />
+          <NavigationProperty Name="SiparisDetay" Relationship="Self.FK_SiparisDetay_Siparis" FromRole="Siparis" ToRole="SiparisDetay" />
+        </EntityType>
+        <EntityType Name="SiparisDetay">
+          <Key>
+            <PropertyRef Name="SiparisDetayID" />
+          </Key>
+          <Property Name="SiparisDetayID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Siparis_ID" Type="Int32" Nullable="false" />
+          <Property Name="Urun_ID" Type="Int32" Nullable="false" />
+          <Property Name="Adet" Type="Int32" />
+          <NavigationProperty Name="Siparis" Relationship="Self.FK_SiparisDetay_Siparis" FromRole="SiparisDetay" ToRole="Siparis" />
+          <NavigationProperty Name="Urun" Relationship="Self.FK_SiparisDetay_Urun" FromRole="SiparisDetay" ToRole="Urun" />
+        </EntityType>
+        <EntityType Name="Urun">
+          <Key>
+            <PropertyRef Name="UrunID" />
+          </Key>
+          <Property Name="UrunID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UrunGrup_ID" Type="Int32" Nullable="false" />
+          <Property Name="Kafe_ID" Type="Int32" Nullable="false" />
+          <Property Name="UrunAdi" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UrunFiyati" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Kafeler" Relationship="Self.FK_Urun_Kafeler" FromRole="Urun" ToRole="Kafeler" />
+          <NavigationProperty Name="SiparisDetay" Relationship="Self.FK_SiparisDetay_Urun" FromRole="Urun" ToRole="SiparisDetay" />
+          <NavigationProperty Name="UrunGruplari" Relationship="Self.FK_Urun_UrunGruplari" FromRole="Urun" ToRole="UrunGruplari" />
+        </EntityType>
+        <EntityType Name="UrunGruplari">
+          <Key>
+            <PropertyRef Name="UrunGrupID" />
+          </Key>
+          <Property Name="UrunGrupID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Adi" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Resim" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Urun" Relationship="Self.FK_Urun_UrunGruplari" FromRole="UrunGruplari" ToRole="Urun" />
+        </EntityType>
+        <Association Name="FK_Hesap_Siparis">
+          <End Role="Siparis" Type="Self.Siparis" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Hesap" Type="Self.Hesap" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Siparis">
+              <PropertyRef Name="SiparisID" />
+            </Principal>
+            <Dependent Role="Hesap">
+              <PropertyRef Name="Siparis_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Kullanici_Kafeler">
+          <End Role="Kafeler" Type="Self.Kafeler" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Kullanici" Type="Self.Kullanici" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kafeler">
+              <PropertyRef Name="KafeID" />
+            </Principal>
+            <Dependent Role="Kullanici">
+              <PropertyRef Name="Kafe_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Masalar_Kafeler">
+          <End Role="Kafeler" Type="Self.Kafeler" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Masalar" Type="Self.Masalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kafeler">
+              <PropertyRef Name="KafeID" />
+            </Principal>
+            <Dependent Role="Masalar">
+              <PropertyRef Name="Kafe_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Urun_Kafeler">
+          <End Role="Kafeler" Type="Self.Kafeler" Multiplicity="1" />
+          <End Role="Urun" Type="Self.Urun" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kafeler">
+              <PropertyRef Name="KafeID" />
+            </Principal>
+            <Dependent Role="Urun">
+              <PropertyRef Name="Kafe_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Siparis_Masalar">
+          <End Role="Masalar" Type="Self.Masalar" Multiplicity="1" />
+          <End Role="Siparis" Type="Self.Siparis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Masalar">
+              <PropertyRef Name="MasaID" />
+            </Principal>
+            <Dependent Role="Siparis">
+              <PropertyRef Name="Masa_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SiparisDetay_Siparis">
+          <End Role="Siparis" Type="Self.Siparis" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SiparisDetay" Type="Self.SiparisDetay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Siparis">
+              <PropertyRef Name="SiparisID" />
+            </Principal>
+            <Dependent Role="SiparisDetay">
+              <PropertyRef Name="Siparis_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SiparisDetay_Urun">
+          <End Role="Urun" Type="Self.Urun" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SiparisDetay" Type="Self.SiparisDetay" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Urun">
+              <PropertyRef Name="UrunID" />
+            </Principal>
+            <Dependent Role="SiparisDetay">
+              <PropertyRef Name="Urun_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Urun_UrunGruplari">
+          <End Role="UrunGruplari" Type="Self.UrunGruplari" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Urun" Type="Self.Urun" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UrunGruplari">
+              <PropertyRef Name="UrunGrupID" />
+            </Principal>
+            <Dependent Role="Urun">
+              <PropertyRef Name="UrunGrup_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="adisyondbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Hesap" EntityType="Self.Hesap" />
+          <EntitySet Name="Kafeler" EntityType="Self.Kafeler" />
+          <EntitySet Name="Kullanici" EntityType="Self.Kullanici" />
+          <EntitySet Name="Masalar" EntityType="Self.Masalar" />
+          <EntitySet Name="Siparis" EntityType="Self.Siparis" />
+          <EntitySet Name="SiparisDetay" EntityType="Self.SiparisDetay" />
+          <EntitySet Name="Urun" EntityType="Self.Urun" />
+          <EntitySet Name="UrunGruplari" EntityType="Self.UrunGruplari" />
+          <AssociationSet Name="FK_Hesap_Siparis" Association="Self.FK_Hesap_Siparis">
+            <End Role="Siparis" EntitySet="Siparis" />
+            <End Role="Hesap" EntitySet="Hesap" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Kullanici_Kafeler" Association="Self.FK_Kullanici_Kafeler">
+            <End Role="Kafeler" EntitySet="Kafeler" />
+            <End Role="Kullanici" EntitySet="Kullanici" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Masalar_Kafeler" Association="Self.FK_Masalar_Kafeler">
+            <End Role="Kafeler" EntitySet="Kafeler" />
+            <End Role="Masalar" EntitySet="Masalar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Urun_Kafeler" Association="Self.FK_Urun_Kafeler">
+            <End Role="Kafeler" EntitySet="Kafeler" />
+            <End Role="Urun" EntitySet="Urun" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Siparis_Masalar" Association="Self.FK_Siparis_Masalar">
+            <End Role="Masalar" EntitySet="Masalar" />
+            <End Role="Siparis" EntitySet="Siparis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SiparisDetay_Siparis" Association="Self.FK_SiparisDetay_Siparis">
+            <End Role="Siparis" EntitySet="Siparis" />
+            <End Role="SiparisDetay" EntitySet="SiparisDetay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SiparisDetay_Urun" Association="Self.FK_SiparisDetay_Urun">
+            <End Role="Urun" EntitySet="Urun" />
+            <End Role="SiparisDetay" EntitySet="SiparisDetay" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Urun_UrunGruplari" Association="Self.FK_Urun_UrunGruplari">
+            <End Role="UrunGruplari" EntitySet="UrunGruplari" />
+            <End Role="Urun" EntitySet="Urun" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="adisyondbModelStoreContainer" CdmEntityContainer="adisyondbEntities">
+          <EntitySetMapping Name="Hesap">
+            <EntityTypeMapping TypeName="adisyondbModel.Hesap">
+              <MappingFragment StoreEntitySet="Hesap">
+                <ScalarProperty Name="HesapID" ColumnName="HesapID" />
+                <ScalarProperty Name="Siparis_ID" ColumnName="Siparis_ID" />
+                <ScalarProperty Name="OdemeTuru" ColumnName="OdemeTuru" />
+                <ScalarProperty Name="Tarih" ColumnName="Tarih" />
+                <ScalarProperty Name="Tutar" ColumnName="Tutar" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kafeler">
+            <EntityTypeMapping TypeName="adisyondbModel.Kafeler">
+              <MappingFragment StoreEntitySet="Kafeler">
+                <ScalarProperty Name="KafeID" ColumnName="KafeID" />
+                <ScalarProperty Name="KafeAdi" ColumnName="KafeAdi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kullanici">
+            <EntityTypeMapping TypeName="adisyondbModel.Kullanici">
+              <MappingFragment StoreEntitySet="Kullanici">
+                <ScalarProperty Name="KullaniciID" ColumnName="KullaniciID" />
+                <ScalarProperty Name="Kafe_ID" ColumnName="Kafe_ID" />
+                <ScalarProperty Name="KullaniciAdi" ColumnName="KullaniciAdi" />
+                <ScalarProperty Name="Sifre" ColumnName="Sifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Masalar">
+            <EntityTypeMapping TypeName="adisyondbModel.Masalar">
+              <MappingFragment StoreEntitySet="Masalar">
+                <ScalarProperty Name="MasaID" ColumnName="MasaID" />
+                <ScalarProperty Name="Kafe_ID" ColumnName="Kafe_ID" />
+                <ScalarProperty Name="MasaNo" ColumnName="MasaNo" />
+                <ScalarProperty Name="Aciklama" ColumnName="Aciklama" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Siparis">
+            <EntityTypeMapping TypeName="adisyondbModel.Siparis">
+              <MappingFragment StoreEntitySet="Siparis">
+                <ScalarProperty Name="SiparisID" ColumnName="SiparisID" />
+                <ScalarProperty Name="Masa_ID" ColumnName="Masa_ID" />
+                <ScalarProperty Name="HesapOdendi" ColumnName="HesapOdendi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SiparisDetay">
+            <EntityTypeMapping TypeName="adisyondbModel.SiparisDetay">
+              <MappingFragment StoreEntitySet="SiparisDetay">
+                <ScalarProperty Name="SiparisDetayID" ColumnName="SiparisDetayID" />
+                <ScalarProperty Name="Siparis_ID" ColumnName="Siparis_ID" />
+                <ScalarProperty Name="Urun_ID" ColumnName="Urun_ID" />
+                <ScalarProperty Name="Adet" ColumnName="Adet" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Urun">
+            <EntityTypeMapping TypeName="adisyondbModel.Urun">
+              <MappingFragment StoreEntitySet="Urun">
+                <ScalarProperty Name="UrunID" ColumnName="UrunID" />
+                <ScalarProperty Name="UrunGrup_ID" ColumnName="UrunGrup_ID" />
+                <ScalarProperty Name="Kafe_ID" ColumnName="Kafe_ID" />
+                <ScalarProperty Name="UrunAdi" ColumnName="UrunAdi" />
+                <ScalarProperty Name="UrunFiyati" ColumnName="UrunFiyati" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UrunGruplari">
+            <EntityTypeMapping TypeName="adisyondbModel.UrunGruplari">
+              <MappingFragment StoreEntitySet="UrunGruplari">
+                <ScalarProperty Name="UrunGrupID" ColumnName="UrunGrupID" />
+                <ScalarProperty Name="Adi" ColumnName="Adi" />
+                <ScalarProperty Name="Resim" ColumnName="Resim" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

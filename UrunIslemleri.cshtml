@@ -1,0 +1,80 @@
+﻿@model CokluAdisyon.Models.urundetay
+@{
+    ViewBag.Title = "UrunIslemleri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1>
+        Urun İslemleri
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Urun Kayitlari
+        </small>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="container">
+        <!-- PAGE CONTENT BEGINS -->
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <div class="col-xs-12">
+
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="ace-icon fa fa-shopping-cart"></i>
+                                Urunler
+                            </h5>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main">
+
+                                <table class="table table-striped">
+                                    <thead class="thin-border-bottom">
+                                        <tr>
+                                            <th class="text-center">#</th>
+
+                                            <th class="text-center">
+                                                <i class="ace-icon fa fa-caret-right blue"></i>Ürün Grubu
+                                            </th>
+
+                                            <th class="text-center">
+                                                <i class="ace-icon fa fa-caret-right blue"></i>Ürün Adı
+                                            </th>
+
+                                            <th class="text-center">
+                                                <i class="ace-icon fa fa-caret-right blue"></i>Ürün Fiyatı
+                                            </th>
+
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        @{ int syc = 1;}
+                                        @foreach (var item_urunler in Model.urunler)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@syc</td>
+                                                <td class="text-center">@item_urunler.UrunGruplari.Adi</td>
+                                                <td class="text-center">@item_urunler.UrunAdi</td>
+                                                <td class="text-center">@item_urunler.UrunFiyati<img src="~/Content/tl.png" width="7" /></td>
+                                            </tr>
+                                            syc++;
+                                        }
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+</div>

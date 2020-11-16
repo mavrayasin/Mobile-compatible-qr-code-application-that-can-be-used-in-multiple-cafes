@@ -1,0 +1,218 @@
+﻿@model CokluAdisyon.Models.masadetaycls
+@{
+    ViewBag.Title = "MasaDetay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var urun_gruplari = Model.urunler.GroupBy(a => a.UrunGruplari).Select(q => new { urun_grubu = q.Key }).ToList();
+}
+
+<div class="page-header">
+    <h1>
+        Masa-@Model.masa.MasaNo
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            Masa Siparişleri
+        </small>
+        <a href="/Adisyon/AnaSayfa" class="btn btn-danger btn-white btn-sm pull-right"><i class="fa fa-reply"></i> Geri</a>
+    </h1>
+</div><!-- /.page-header -->
+
+<div class="row">
+    <div class="col-xs-12">
+
+        <div class="col-sm-5 col-xs-12">
+
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="ace-icon fa fa-shopping-cart"></i>
+                        Ürünler
+                    </h5>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+
+                        @foreach (var item_urun_grup in urun_gruplari)
+                        {
+                            <div class="container-fluid">
+                                <h4 class="header smaller lighter grey" style="font-weight:bold;">
+                                    <img src="@item_urun_grup.urun_grubu.Resim" width="23" />
+                                    @item_urun_grup.urun_grubu.Adi
+                                </h4>
+                            </div>
+                            <div class="container-fluid">
+                                @foreach (var item_urun in Model.urunler.Where(i => i.UrunGrup_ID == item_urun_grup.urun_grubu.UrunGrupID))
+                                {
+                                    <div class="col-sm-3 col-xs-12">
+                                        <a href="#" style="color:black!important;" onclick="urun_id_getir('@item_urun.UrunID')" data-target="#sipariVerModal" data-toggle="modal" class="text-center">@item_urun.UrunAdi <br />(@item_urun.UrunFiyati<img src="~/Content/tl.png" width="7" />)</a>
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                    </div><!-- /.widget-main -->
+                </div><!-- /.widget-body -->
+            </div>
+
+        </div>
+        <div class="col-sm-7 col-xs-12">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="ace-icon fa fa-cutlery"></i>
+                        Masa Siparişleri
+                        <a class="btn btn-warning btn-minier btn-white pull-right" style="margin:5px 5px 0 0;" data-target="#hesabiOdeModal" data-toggle="modal" onclick="hesap_tutar_getir()">
+                            <i class="fa fa-money-bill-alt"></i> Hesabı Kapat
+                        </a>
+                    </h5>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main">
+
+                        <table class="table table-bordered table-striped">
+                            <thead class="thin-border-bottom">
+                                <tr>
+                                    <th>
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Ürün
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Adet
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Birim Fiyat
+                                    </th>
+
+                                    <th class="text-center">
+                                        <i class="ace-icon fa fa-caret-right blue"></i>Fiyat
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    double toplam_fiyat=0;
+                                }
+                                @if (Model.masa_siparisleri.Count > 0)
+                                {
+                                    foreach (var item_siparis_urun in Model.masa_siparisleri)
+                                    {
+                                        <tr>
+                                            <td>@item_siparis_urun.Urun.UrunAdi</td>
+                                            <td class="text-center">@item_siparis_urun.Adet</td>
+                                            <td class="text-center">@item_siparis_urun.Urun.UrunFiyati<img src="~/Content/tl.png" width="7" /></td>
+                                            <td class="text-center">@(item_siparis_urun.Urun.UrunFiyati * item_siparis_urun.Adet)<img src="~/Content/tl.png" width="7" /></td>
+                                        </tr>
+
+                                        toplam_fiyat =((toplam_fiyat) + (item_siparis_urun.Urun.UrunFiyati * item_siparis_urun.Adet));
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center">
+                                            <span class="text-danger">Sipariş bulunmamaktadır.</span>
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td colspan="3" class="text-right"><b>Toplam Fiyat:</b></td>
+                                    <td class="text-center">
+                                        @toplam_fiyat<img src="~/Content/tl.png" width="7" />
+                                        <input type="hidden" id="toplam_tutar_degeri" value="@toplam_fiyat" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        .ace-spinner {
+            width: 100% !important;
+        }
+    </style>
+    <div id="modals">
+
+        <div id="sipariVerModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Yeni Ürün Siparişi</h4>
+                    </div>
+                    <form method="post" action="/Adisyon/siparisUrunEkle">
+                        <div class="modal-body">
+                            <input type="hidden" name="siparis_id" value="@Model.siparis.SiparisID" />
+                            <input type="hidden" name="urun_id" id="urun_id" />
+                            <input type="hidden" name="masa_id" value="@Model.masa.MasaNo" />
+
+                            <div>
+                                <label for="form-field-11">Ürün Adedi</label><br />
+                                <input type="text" id="spinner3" name="urunAdet" class="width-100" />
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-warning">EKLE</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">KAPAT</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="hesabiOdeModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Hesabı Kapat</h4>
+                    </div>
+                    <form method="post" action="/Adisyon/HesapIslem">
+                        <div class="modal-body">
+                            <input type="hidden" name="siparis_id" value="@Model.siparis.SiparisID" />
+                            <input type="hidden" name="tutar" id="tutar" />
+                            <div class="alert alert-warning"><span id="odenecek_miktar"></span><img src="~/Content/tl.png" width="7" /> tutarındaki hesabı kapatmak için ödeme türünü seçiniz.</div>
+                            <div>
+                                <label for="odeme_turu">Ödeme Türü</label><br />
+                                <select class="form-control" id="odeme_turu" name="odeme_turu">
+                                    <option value="1">Kredi Kartı</option>
+                                    <option value="2">Nakit</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-success">Hesabı Kapat</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">KAPAT</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function urun_id_getir(id) {
+            $('#urun_id').val(id);
+        }
+
+        function hesap_tutar_getir() {
+            $('#tutar').val($('#toplam_tutar_degeri').val());
+            $('#odenecek_miktar').html($('#toplam_tutar_degeri').val());
+        }
+    </script>
